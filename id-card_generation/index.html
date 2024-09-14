@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="utf-8">
+    <title>ID Card Generator</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f7f7f7;
+            font-family: 'Roboto', sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            display: flex;
+            justify-content: center;
+            padding: 40px;
+        }
+
+        .section-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            border: 1px solid #ddd;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            max-width: 600px;
+            width: 100%;
+            border-radius: 10px;
+        }
+
+        .form-element {
+            margin: 10px 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .form-label {
+            font-size: 14px;
+            text-align: left;
+            flex: 1;
+        }
+
+        .form-input {
+            font-size: 14px;
+            padding: 6px;
+            flex: 2;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        #idCard {
+            border: 2px solid #007bff;
+            height: 5.0in;
+            /* Increased height */
+            width: 3.3in;
+            /* Increased width */
+            background-color: #fffff0;
+            text-align: center;
+            display: inline-block;
+            border-radius: 15px;
+            font-family: 'Roboto', sans-serif;
+            padding: 15px;
+            /* Increased padding */
+            position: relative;
+            box-sizing: border-box;
+            margin: 20px auto;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            
+        }
+
+        #userPhoto {
+            width: 85px;
+            height: 85px;
+            object-fit: cover;
+            margin: 0;
+            border: 2px solid black;
+        }
+
+        #postFullName,
+        #postRollNo,
+        #postDepartmentName,
+        #postDOB,
+        #postBloodGroup,
+        #postAadharNo,
+        #postMobileNo {
+            font-size: 14px;
+            /* Increased font size */
+            font-weight: bold;
+            margin: 5px 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        #postFullName {
+            font-size: 14px;
+        }
+
+        #postDetails {
+            font-size: 14px;
+            /* Increased font size */
+            text-align: left;
+            margin-top: 10px;
+        }
+
+        #postDetails p {
+            margin: 5px 0;
+            /* Adjust the vertical spacing between fields */
+            font-size: 14px;
+            /* Keep font size uniform */
+            font-weight: bold;
+            text-align: left;
+        }
+
+        .signature {
+            font-size: 10px;
+            text-align: center;
+            margin-top: 5px;
+        }
+
+        .sign-container {
+            display: flex;
+            justify-content: space-between;
+            padding: 0 10px;
+            /* Increased padding */
+            margin-top: 10px;
+        }
+
+        .sign {
+            width: 50px;
+            height: 25px;
+            object-fit: cover;
+        }
+
+        button {
+            text-align: center;
+            margin-bottom: 20px;
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        input[type="file"] {
+            margin: 10px 0;
+            padding: 4px;
+        }
+
+        .glow {
+            font-size: 14px;
+            font-weight: bold;
+            color: darkblue;
+            line-height: 1.2;
+            word-wrap: break-word;
+            max-width: 100%;
+        }
+
+        hr {
+            border: none;
+            border-top: 1px solid black;
+        }
+
+        .signature-label {
+            font-size: 10px;
+            text-align: center;
+            margin-top: 5px;
+            font-weight: bold;
+        }
+
+        .alignment {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        #downloadBtn {
+            display: none;
+        }
+
+        #postAddress,
+        #postValidUpTo {
+            font-size: 14px;
+            /* Adjust font size */
+            font-weight: bold;
+            margin: 5px 0;
+        }
+
+        #postAddress {
+            margin-top: 10px;
+            /* Add margin if needed */
+            border: 1.5px solid orange;
+            padding: 1px;
+        }
+
+        #postValidUpTo {
+            margin-top: 10px;
+            /* Add margin if needed */
+        }
+
+        .blood-group-container {
+            position: relative;
+            display: inline-block;
+            transform: translate(50px, -25px);
+            background-color: #fffff0;
+        }
+
+        .blood-group-img {
+            width: 25px;
+            height: 25px;
+
+        }
+
+        .blood-group-text {
+            position: absolute;
+            top: 0px;
+            left: 30px;
+            transform: translate(-50%, -50%);
+            font-size: 12px;
+            color: black;
+            /* Adjust as needed */
+            font-weight: bold;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="section-container">
+            <h3 class="glow" style="text-align: center;">
+                <img src="./jntuacea.png" alt="Logo" width="60" height="60"
+                    style="vertical-align: middle; display: inline; margin-right: 10px; border-radius: 10px;">
+                <span style="display: inline;">JNTUA COLLEGE OF ENGINEERING ANANTAPURAMU-515002(AP)</span>
+            </h3>
+            <div class="form-element">
+                <label class="form-label" for="fullName"><b>Full Name:</b></label>
+                <input type="text" id="fullName" class="form-input" placeholder="Enter Full Name">
+            </div>
+
+            <div class="form-element">
+                <label class="form-label" for="rollNo"><b>Roll No:</b></label>
+                <input type="text" id="rollNo" class="form-input" placeholder="Enter Roll No">
+            </div>
+
+            <div class="form-element">
+                <label class="form-label" for="departmentName"><b>Department Name:</b></label>
+                <input type="text" id="departmentName" class="form-input" placeholder="Enter Department Name">
+            </div>
+
+            <div class="form-element">
+                <label class="form-label" for="dob"><b>Date of Birth:</b></label>
+                <input type="date" id="dob" class="form-input">
+            </div>
+
+            <div class="form-element">
+                <label class="form-label" for="bloodGroup"><b>Blood Group:</b></label>
+                <input type="text" id="bloodGroup" class="form-input" placeholder="Enter Blood Group">
+            </div>
+
+            <div class="form-element">
+                <label class="form-label" for="address"><b>Address:</b></label>
+                <input type="text" id="address" class="form-input" placeholder="Enter Address">
+            </div>
+
+            <div class="form-element">
+                <label class="form-label" for="aadharNo"><b>Aadhar No:</b></label>
+                <input type="text" id="aadharNo" class="form-input" placeholder="Enter Aadhar No">
+            </div>
+
+            <div class="form-element">
+                <label class="form-label" for="mobileNo"><b>Mobile No:</b></label>
+                <input type="text" id="mobileNo" class="form-input" placeholder="Enter Mobile No">
+            </div>
+
+            <div class="form-element">
+                <label class="form-label" for="photoUpload"><b>Upload Photo:</b></label>
+                <input type="file" id="photoUpload" class="form-input" accept="image/*">
+            </div>
+
+            <div class="form-element">
+                <label class="form-label" for="studentSignUpload"><b>Upload Student Signature:</b></label>
+                <input type="file" id="studentSignUpload" class="form-input" accept="image/*">
+            </div>
+
+            <div class="form-element">
+                <label class="form-label" for="principalSignUpload"><b>Upload Principal Signature:</b></label>
+                <input type="file" id="principalSignUpload" class="form-input" accept="image/*">
+            </div>
+
+            <button onclick="generateIdCard()">Generate ID Card</button>
+            <button id="downloadBtn" onclick="triggerDownload()">Download ID Card</button>
+        </div>
+
+        <div id="idCard" class="id-card-container">
+            <h3 class="glow" style="text-align: center;">
+                <div class="header" style="background-color: rgb(11, 11, 175); color: white; border-radius: 3px;">
+                    <img src="./jntuacea.png" alt="Logo" width="35" height="35"
+                    style="vertical-align: middle; display: inline; margin-right: 10px; background-color: blue; color: white;">
+                <span style="display: inline;">JNTUA COLLEGE OF ENGINEERING [AUTONOMOUS] AANTHAPUR-515002[A.P]</span>
+                </div>
+               
+            </h3>
+            <img src="https://via.placeholder.com/100x100" alt="Student Photo" id="userPhoto">
+            <div class="blood-group-container">
+                <img src="./blood_group.jpg" alt="blood_group" class="blood-group-img">
+                <p id="postBloodGroup" class="blood-group-text"></p>
+            </div>
+
+            <div id="postDetails">
+                <p id="postFullName"></p>
+                <p id="postRollNo"></p>
+                <p id="postDepartmentName"></p>
+                <p id="postDOB"></p>
+                <p id="postAadharNo"></p>
+                <p id="postMobileNo"></p>
+
+                <hr>
+                <div class="sign-container">
+                    <div>
+                        <img src="https://via.placeholder.com/50x25" alt="Student Signature" id="studentSign"
+                            class="sign">
+                        <p class="signature-label">Student</p>
+                    </div>
+                    <div>
+                        <img src="https://via.placeholder.com/50x25" alt="Principal Signature" id="principalSign"
+                            class="sign">
+                        <p class="signature-label">Principal</p>
+                    </div>
+                </div>
+            </div>
+            <div class="footer">
+                <p id="postAddress"></p> <!-- Address Field -->
+            </div>
+            <div>
+                <p id="postValidUpTo" style="color: red; font-size:bold;">Valid Up To: June 2026</p> <!-- Valid Up To Field -->
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        function generateIdCard() {
+            // Fill in ID Card details from form inputs
+            document.getElementById('postFullName').innerText = 'Name: ' + document.getElementById('fullName').value;
+            document.getElementById('postRollNo').innerText = 'Roll No: ' + document.getElementById('rollNo').value;
+            document.getElementById('postDepartmentName').innerText = 'Department: ' + document.getElementById('departmentName').value;
+            document.getElementById('postDOB').innerText = 'DOB: ' + document.getElementById('dob').value;
+            document.getElementById('postBloodGroup').innerText = '' + document.getElementById('bloodGroup').value;
+            document.getElementById('postAadharNo').innerText = 'Aadhar No: ' + document.getElementById('aadharNo').value;
+            document.getElementById('postMobileNo').innerText = 'Mobile No: ' + document.getElementById('mobileNo').value;
+            document.getElementById('postAddress').innerText = 'Address: ' + document.getElementById('address').value; // Add Address
+
+            // Update photo and signature
+            var photoUpload = document.getElementById('photoUpload').files[0];
+            if (photoUpload) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    document.getElementById('userPhoto').src = e.target.result;
+                };
+                reader.readAsDataURL(photoUpload);
+            }
+
+            var studentSignUpload = document.getElementById('studentSignUpload').files[0];
+            if (studentSignUpload) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    document.getElementById('studentSign').src = e.target.result;
+                };
+                reader.readAsDataURL(studentSignUpload);
+            }
+
+            var principalSignUpload = document.getElementById('principalSignUpload').files[0];
+            if (principalSignUpload) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    document.getElementById('principalSign').src = e.target.result;
+                };
+                reader.readAsDataURL(principalSignUpload);
+            }
+
+            // Show download button
+            document.getElementById('downloadBtn').style.display = 'inline-block';
+        }
+
+
+        function updateImage(inputId, imgId) {
+            var fileInput = document.getElementById(inputId).files[0];
+            if (fileInput) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    document.getElementById(imgId).src = e.target.result;
+                };
+                reader.readAsDataURL(fileInput);
+            }
+        }
+
+        function triggerDownload() {
+            var idCardElement = document.getElementById('idCard');
+
+            // Gather all images within the ID card that need to be loaded
+            var images = idCardElement.getElementsByTagName('img');
+            var imagePromises = Array.from(images).map(image => {
+                return new Promise((resolve, reject) => {
+                    if (image.complete) {
+                        resolve();
+                    } else {
+                        image.onload = resolve;
+                        image.onerror = reject;
+                    }
+                });
+            });
+
+            // Once all images are loaded, call html2canvas
+            Promise.all(imagePromises).then(() => {
+                html2canvas(idCardElement).then(canvas => {
+                    var link = document.createElement('a');
+                    link.href = canvas.toDataURL('image/png');
+                    link.download = 'ID_Card.png';
+                    link.click();
+                });
+            }).catch(error => {
+                console.error('An image failed to load', error);
+            });
+        }
+    </script>
+
+</body>
+
+</html>
